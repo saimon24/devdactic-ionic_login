@@ -2,7 +2,16 @@ angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
 
-
+    var lock = new PatternLock("#lockPattern", {
+        onDraw:function(pattern){
+            if (pattern == "123") {
+                lock.reset();
+                $state.go('tab.dash');
+            } else {
+                lock.error();
+            }
+        }
+    });
 
     $scope.login = function() {
 
