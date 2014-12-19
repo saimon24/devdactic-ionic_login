@@ -1,28 +1,36 @@
 angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
+    $scope.log_pattern = function() {
+        return LoginService.getLoginPattern();
+    }
 
     var lock = new PatternLock("#lockPattern", {
         onDraw:function(pattern){
-            if (pattern == "123") {
-                lock.reset();
-                $state.go('tab.dash');
+            if ($scope.log_pattern()) {
+                LoginService.checkLoginPattern(pattern).success(function(data) {
+                    lock.reset();
+                    $state.go('tab.dash');
+                }).error(function(data) {
+                    lock.error();
+                });
             } else {
-                lock.error();
+                LoginService.setLoginPattern(pattern);
+                lock.reset();
+                $scope.$apply();
             }
         }
     });
 
     $scope.login = function() {
-
-        // LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
-        //     $state.go('tab.dash');
-        // }).error(function(data) {
-            // var alertPopup = $ionicPopup.alert({
-            //     title: 'Login failed!',
-            //     template: 'Please check your credentials!'
-            // });
-        // });
+        LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
+            $state.go('tab.dash');
+        }).error(function(data) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
+        });
     }
 })
 
