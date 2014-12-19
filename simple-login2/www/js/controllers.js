@@ -1,13 +1,16 @@
 angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
-    $scope.log_pattern = function() {
-        return LoginService.getLoginPattern();
-    }
+    // 1
+    $scope.log_pattern = LoginService.getLoginPattern();
 
+    // 2
     var lock = new PatternLock("#lockPattern", {
+        // 3
         onDraw:function(pattern){
-            if ($scope.log_pattern()) {
+            // 4
+            if ($scope.log_pattern) {
+                // 5
                 LoginService.checkLoginPattern(pattern).success(function(data) {
                     lock.reset();
                     $state.go('tab.dash');
@@ -15,8 +18,10 @@ angular.module('starter.controllers', [])
                     lock.error();
                 });
             } else {
+                // 6
                 LoginService.setLoginPattern(pattern);
                 lock.reset();
+                $scope.log_pattern = LoginService.getLoginPattern();
                 $scope.$apply();
             }
         }
