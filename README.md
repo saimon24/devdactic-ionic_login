@@ -1,4 +1,4 @@
-devdactic-ionic_login
+Login examples with ionic and AngularJS
 =====================
 
 Simple login example for ionic with AngularJS
