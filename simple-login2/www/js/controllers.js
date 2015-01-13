@@ -21,8 +21,9 @@ angular.module('starter.controllers', [])
                 // 6
                 LoginService.setLoginPattern(pattern);
                 lock.reset();
-                $scope.log_pattern = LoginService.getLoginPattern();
-                $scope.$apply();
+                $scope.$apply(function() {
+                    $scope.log_pattern = LoginService.getLoginPattern();    
+                });
             }
         }
     });
